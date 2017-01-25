@@ -6,7 +6,7 @@ This is a web-app which will utilize various 3rd party apps/scripts for extracti
 
 - Upload file capability
 - Tokenize Input File
-- Extract Entities (display to console only for now)
+- Extract Entities
 
 ## Downloading
 
