@@ -3,18 +3,21 @@
  */
 package com.artistech.ee.web;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author matta
  */
-public class ProcessMonitor extends HttpServlet {
+public class CAMR extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,19 +30,44 @@ public class ProcessMonitor extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain;charset=UTF-8");
-        String pipeline_id = request.getParameter("pipeline_id");
-//        String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        Data data = DataManager.getData(pipeline_id);
+        String camr_path = getInitParameter("path");
 
-        try (PrintWriter out = response.getWriter()) {
-            if(data.getProc() != null) {
-                out.print(data.getProc().isAlive());
-            }
-            else {
-                out.print(false);
-            }
+        Part pipeline_id_part = request.getPart("pipeline_id");
+        String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
+        Data data = DataManager.getData(pipeline_id);
+        String input_directory = data.getInput();
+        File f = new File(input_directory);
+        String camr_out = data.getCamrOut();
+//        data.setCamrOut(camr_out);
+        File output_dir = new File(camr_out);
+        FileUtils.copyDirectory(new File(input_directory), output_dir);
+//        output_dir.mkdirs();
+
+        File[] copied_input_files = output_dir.listFiles();
+        for (File txt : copied_input_files) {
+            //TODO: need to know "$FILE_LIST", "$INPUT_SGM", "$ENIE_OUTP"
+            ProcessBuilder pb = new ProcessBuilder("./tok-pipeline.sh", txt.getAbsolutePath());
+            pb.directory(new File(camr_path));
+            //catch output...
+            pb.redirectErrorStream(true);
+            Process proc = pb.start();
+            StreamGobbler sg = new StreamGobbler(proc.getInputStream());
+            sg.start();
+            ExternalProcess ex_proc = new ExternalProcess(sg, proc);
+            data.setProc(ex_proc);
+//            try {
+//                proc.waitFor();
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+
         }
+//        Part part = request.getPart("step");
+//        String target = IOUtils.toString(part.getInputStream(), "UTF-8");
+
+        // displays done.jsp page after upload finished
+        getServletContext().getRequestDispatcher("/watchProcess.jsp").forward(
+                request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

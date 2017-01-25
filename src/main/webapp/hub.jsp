@@ -31,5 +31,14 @@
                 </ul>
             </c:if>
         </c:forEach>
+        <h2>Pipeline To Do</h2>
+        <ul>
+            <c:if test="${fn:length(dataBean.data.camrFiles) eq 0}">
+                <li><a href="camr.jsp?pipeline_id=<c:out value="${dataBean.pipeline_id}" />">tok</a></li>
+                </c:if>
+                <c:if test="${fn:length(dataBean.data.camrFiles) gt 0}">
+                <li><a href="elisa.jsp?pipeline_id=<c:out value="${dataBean.pipeline_id}" />">ELISA IE</a></li>
+                </c:if>
+        </ul>
     </body>
 </html>

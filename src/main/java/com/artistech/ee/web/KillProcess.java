@@ -30,8 +30,8 @@ public class KillProcess extends HttpServlet {
         String pipeline_id = request.getParameter("pipeline_id");
         Data data = DataManager.getData(pipeline_id);
         boolean success = false;
-        if (data.getProc() != null && data.getProc().getProcess().isAlive()) {
-            data.getProc().getProcess().destroy();
+        if (data.getProc() != null && data.getProc().isAlive()) {
+            data.getProc().kill();
             success = true;
         }
         response.setContentType("text/plain;charset=UTF-8");

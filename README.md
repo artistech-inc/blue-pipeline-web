@@ -5,6 +5,8 @@ This is a web-app which will utilize various 3rd party apps/scripts for extracti
 ## Version 1.0
 
 - Upload file capability
+- Tokenize Input File
+- Extract Entities (display to console only for now)
 
 ## Downloading
 
@@ -13,6 +15,9 @@ This is a web-app which will utilize various 3rd party apps/scripts for extracti
 ## Configuration
 
 Update the [WEB-INF/web.xml](https://github.com/artistech-inc/blue-pipeline-web/blob/master/src/main/webapp/WEB-INF/web.xml) file. Each Servlet that utilizes an external application/script/process must have the path to the application set. For now, this includes:
+
+- CAMR (see below and also yellow-pipeline-web)
+- Elisa (set the url for Elisa)
 
 Along with the web.xml file, the [META-INF/context.xml](https://github.com/artistech-inc/blue-pipeline-web/blob/master/src/main/webapp/META-INF/context.xml) must be configured. The `data_path` value must be somewhere that Tomcat can write to.
 
@@ -26,6 +31,10 @@ The project can also be compiled on the command line directly using maven.
 cd blue-pipeline-web
 mvn clean package
 ```
+## Dependencies
+To tokenize each sentence prior to extraction.
+
+- [ArtisTech's camr yellow-pipeline fork/branch](https://github.com/artistech-inc/camr/tree/yellow-pipeline)
 
 ## Deployment
 
@@ -37,8 +46,7 @@ The output from compilation is in the `target/` directory as `blue-pipeline-web-
 
 ## TODO
 
-- Output console
-- Delete data with session timeout
+- Save output from Elisa
 
 ## Future (possibly not in scope)
 
