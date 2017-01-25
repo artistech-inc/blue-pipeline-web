@@ -4,6 +4,7 @@
 package com.artistech.ee.web;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
@@ -48,13 +49,19 @@ public class Elisa extends HttpServlet {
         final String model = IOUtils.toString(model_part.getInputStream(), "UTF-8");
         Data data = DataManager.getData(pipeline_id);
         String[] input_files = data.getCamrFiles();
-        String tok = null;
+        String tok2 = null;
         for (String file : input_files) {
             if (file.endsWith(".tok")) {
-                tok = file;
+                tok2 = file;
                 break;
             }
         }
+        final String tok = tok2;
+
+        final String elisa_out = data.getElisa();
+        File elisa_out_file = new File(elisa_out);
+        elisa_out_file.mkdirs();
+
         if (tok != null) {
             final ElisaClient ec = new ElisaClient(url);
             File f = new File(data.getCamrOut() + File.separator + tok);
@@ -64,19 +71,20 @@ public class Elisa extends HttpServlet {
             final PipedOutputStream out = new PipedOutputStream(in);
             StreamGobbler sg = new StreamGobbler(in);
             sg.start();
-
-            final OutputStreamWriter bos = new OutputStreamWriter(out);
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (String line : readLines) {
-                        try {
+                    try (FileWriter fw = new FileWriter(elisa_out + File.separator + tok + "." + lang + "." + model + "." + output_format);
+                            OutputStreamWriter bos = new OutputStreamWriter(out)) {
+                        for (String line : readLines) {
                             String res = ec.ie(line, lang, model, output_format);
                             bos.write(res + System.lineSeparator());
                             bos.flush();
-                        } catch (IOException ex) {
-                            Logger.getLogger(Elisa.class.getName()).log(Level.SEVERE, null, ex);
+                            fw.write(res + System.lineSeparator());
+                            fw.flush();
                         }
+                    } catch (IOException ex) {
+                        Logger.getLogger(Elisa.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });

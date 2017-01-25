@@ -46,7 +46,7 @@ The output from compilation is in the `target/` directory as `blue-pipeline-web-
 
 ## TODO
 
-- Save output from Elisa
+- Do something with the output from Elisa
 
 ## Future (possibly not in scope)
 
