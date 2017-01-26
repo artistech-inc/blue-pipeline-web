@@ -81,9 +81,12 @@ public class UploadServlet extends HttpServlet {
                 dir.mkdirs();
             }
 
-//            try (java.io.BufferedWriter writer = new BufferedWriter(new FileWriter(new File(data.getTestList())))) {
-//                writer.write(part1.getSubmittedFileName() + System.getProperty("line.separator"));
-//            }
+            String submittedFileName = part1.getSubmittedFileName();
+            if ("".equals(submittedFileName)) {
+                // displays done.jsp page after upload finished
+                getServletContext().getRequestDispatcher("/index.jsp").forward(
+                        request, response);
+            }
 
             File f = new File(data.getInput() + File.separator + part1.getSubmittedFileName());
             if (f.exists()) {

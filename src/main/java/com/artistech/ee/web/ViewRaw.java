@@ -29,12 +29,16 @@ public class ViewRaw extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain;charset=UTF-8");
         String pipeline_id = request.getParameter("pipeline_id");
         String stage = request.getParameter("stage");
         String file = request.getParameter("file");
         Data data = DataManager.getData(pipeline_id);
         File ftest = new File(file);
+        if (file.endsWith(".xml")) {
+            response.setContentType("text/xml;charset=UTF-8");
+        } else {
+            response.setContentType("text/plain;charset=UTF-8");
+        }
         if (ftest.exists()) {
             IOUtils.copy(new FileInputStream(ftest), response.getWriter(), "UTF-8");
         } else {
