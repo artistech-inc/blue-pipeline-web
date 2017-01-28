@@ -1,7 +1,8 @@
 <!--
  * Copyright 2017 ArtisTech, Inc.
 -->
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -102,6 +103,7 @@
                     $('#hub_link').unbind('click');
                     proc_alive = false;
                     printConsole("\n\n*********************\nProcess Complete!\n*********************");
+                    document.continue_form.submit();  //go to the next step!!
                 } else {
                     setTimeout("getProcessStatus()", 250);
                 }
@@ -129,13 +131,18 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     </head>
     <body onload="init();">
-        <h1>Watch Process</h1>
-        Your pipeline_id is: <c:out value="${dataBean.pipeline_id}" />
+        <h1>Watch Process: <c:out value="${dataBean.data.currentParts.get(dataBean.data.pipelineIndex-1).name}" /></h1>
         <br />
         <textarea id="console" rows="50" cols="85"></textarea>
         <br />
-        <a id="hub_link" href="hub.jsp?pipeline_id=<c:out value="${dataBean.pipeline_id}" />">HUB</a>
-        <br />
-        <a id="kill_link" href="javascript:kill_proc();">Kill Process [ALPHA]</a>
+        <c:set value="${fn:length(dataBean.data.currentPath)}" var="specifed" />
+        <c:if test="${dataBean.data.pipelineIndex lt specifed}">
+            <form name="continue_form" id="confinue_form" method="POST" action="${dataBean.data.currentParts.get(dataBean.data.pipelineIndex).page}" enctype="multipart/form-data">
+            </c:if>
+            <c:if test="${dataBean.data.pipelineIndex eq specifed}">
+                <form name="continue_form" id="confinue_form" method="POST" action="hub.jsp">
+                </c:if>
+                <input type="hidden" id="pipeline_id" name="pipeline_id" value="${dataBean.pipeline_id}" />
+            </form>
     </body>
 </html>

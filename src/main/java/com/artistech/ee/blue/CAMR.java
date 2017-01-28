@@ -48,6 +48,7 @@ public class CAMR extends HttpServlet {
 //        output_dir.mkdirs();
 
         File[] copied_input_files = output_dir.listFiles();
+        //TODO: this should not be in a for loop
         for (File txt : copied_input_files) {
             //TODO: need to know "$FILE_LIST", "$INPUT_SGM", "$ENIE_OUTP"
             ProcessBuilder pb = new ProcessBuilder("./tok-pipeline.sh", txt.getAbsolutePath());
@@ -70,6 +71,7 @@ public class CAMR extends HttpServlet {
 //        String target = IOUtils.toString(part.getInputStream(), "UTF-8");
 
         // displays done.jsp page after upload finished
+        data.setPipelineIndex(data.getPipelineIndex() + 1);
         getServletContext().getRequestDispatcher("/watchProcess.jsp").forward(
                 request, response);
     }

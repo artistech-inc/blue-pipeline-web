@@ -5,6 +5,7 @@ package com.artistech.ee.blue;
 
 import com.artistech.ee.beans.Data;
 import com.artistech.ee.beans.DataManager;
+import com.artistech.ee.beans.PipelineBean;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
 import java.io.File;
@@ -47,11 +48,15 @@ public class Elisa extends HttpServlet {
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        Part output_format_part = request.getPart("outputFormat");
-        final String output_format = IOUtils.toString(output_format_part.getInputStream(), "UTF-8");
-        Part model_part = request.getPart("model");
-        final String model = IOUtils.toString(model_part.getInputStream(), "UTF-8");
+        
+//        Part output_format_part = request.getPart("outputFormat");
+//        final String output_format = IOUtils.toString(output_format_part.getInputStream(), "UTF-8");
+//        Part model_part = request.getPart("model");
+//        final String model = IOUtils.toString(model_part.getInputStream(), "UTF-8");
         Data data = DataManager.getData(pipeline_id);
+        PipelineBean.Part part = data.getPipelineParts().get(data.getPipelineIndex());
+        final String model = part.getParameter("model").getValue();
+        final String output_format = part.getParameter("output_format").getValue();
         String[] input_files = data.getCamrFiles();
         String tok2 = null;
         for (String file : input_files) {
@@ -95,6 +100,8 @@ public class Elisa extends HttpServlet {
             t.start();
             ExternalProcess ex_proc = new ExternalProcess(sg, t);
             data.setProc(ex_proc);
+
+            data.setPipelineIndex(data.getPipelineIndex() + 1);
 
             getServletContext().getRequestDispatcher("/watchProcess.jsp").forward(
                     request, response);

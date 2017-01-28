@@ -33,7 +33,7 @@
         <servlet-class>com.artistech.ee.blue.Elisa</servlet-class>
         <init-param>
             <param-name>url</param-name>
-            <param-value/>
+            <param-value>http://localhost/</param-value>
         </init-param>
         <init-param>
             <param-name>lang</param-name>
