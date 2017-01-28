@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>CAMR</servlet-name>
-        <servlet-class>com.artistech.ee.web.CAMR</servlet-class>
+        <servlet-class>com.artistech.ee.blue.CAMR</servlet-class>
         <init-param>
             <param-name>path</param-name>
             <param-value>/home/matta/Dev/camr</param-value>
@@ -30,10 +30,10 @@
     </servlet>
     <servlet>
         <servlet-name>Elisa</servlet-name>
-        <servlet-class>com.artistech.ee.web.Elisa</servlet-class>
+        <servlet-class>com.artistech.ee.blue.Elisa</servlet-class>
         <init-param>
             <param-name>url</param-name>
-            <param-value></param-value>
+            <param-value/>
         </init-param>
         <init-param>
             <param-name>lang</param-name>

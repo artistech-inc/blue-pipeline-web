@@ -3,6 +3,7 @@
  */
 package com.artistech.ee.web;
 
+import com.artistech.ee.beans.DataManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;

@@ -1,7 +1,7 @@
 /*
  * Copyright 2017 ArtisTech, Inc.
  */
-package com.artistech.ee.web;
+package com.artistech.ee.beans;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 /*
  * Copyright 2017 ArtisTech, Inc.
  */
-package com.artistech.ee.web;
+package com.artistech.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
