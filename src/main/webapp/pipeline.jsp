@@ -69,6 +69,7 @@
             </c:forEach>
         </select>
 
+        <!--TODO: Fix Empty Select if all steps are specified!-->
         <c:forEach var="step" items="${pipelineBean.getPartsAfter(specifed)}">
             <div id='<c:out value="${step.name}__div" />' style='display: none; border-width: 0; border-style : solid; border-color : black'>
                 <form method="POST" action="PathBuild" enctype="multipart/form-data">
