@@ -15,7 +15,7 @@ parts:
             - input
         page: CAMR
         parameters: []
-    liberal-event:
+    elisa:
         requires:
             - camr
         page: Elisa

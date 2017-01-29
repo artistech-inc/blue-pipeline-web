@@ -7,11 +7,9 @@ import com.artistech.ee.beans.Data;
 import com.artistech.ee.beans.DataManager;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
+import com.artistech.utils.StreamGobblerWrapper;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -51,12 +49,12 @@ public class CAMR extends HttpServlet {
 
         final File[] copied_input_files = output_dir.listFiles();
 
-        PipedInputStream in = new PipedInputStream();
-        final PipedOutputStream out = new PipedOutputStream(in);
-        StreamGobbler sg = new StreamGobbler(in);
+//        PipedInputStream in = new PipedInputStream();
+//        final PipedOutputStream out = new PipedOutputStream(in);
+        final StreamGobblerWrapper sg = new StreamGobblerWrapper(null);
         sg.start();
 
-        final OutputStreamWriter bos = new OutputStreamWriter(out);
+//        final OutputStreamWriter bos = new OutputStreamWriter(out);
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,14 +67,15 @@ public class CAMR extends HttpServlet {
                         Process proc = pb.start();
                         StreamGobbler sg2 = new StreamGobbler(proc.getInputStream());
                         sg2.start();
+                        sg.setWrapped(sg2);
                         try {
                             proc.waitFor();
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        bos.write(sg2.getUpdateText());
-                        bos.write(System.lineSeparator());
-                        bos.flush();
+//                        bos.write(sg2.getUpdateText());
+//                        bos.write(System.lineSeparator());
+//                        bos.flush();
                     } catch (IOException ex) {
                         Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
                     }
