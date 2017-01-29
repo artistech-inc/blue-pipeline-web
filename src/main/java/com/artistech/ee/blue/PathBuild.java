@@ -1,7 +1,7 @@
 /*
  * Copyright 2017 ArtisTech, Inc.
  */
-package com.artistech.ee.web;
+package com.artistech.ee.blue;
 
 import com.artistech.ee.beans.DataManager;
 import com.artistech.ee.beans.PipelineBean;
@@ -75,7 +75,7 @@ public class PathBuild extends HttpServlet {
         String pipeline_id = IOUtils.toString(part.getInputStream(), "UTF-8");
         DataManager dataManagerBean = new DataManager();
         dataManagerBean.setPipeline_id(pipeline_id);
-        Data data = DataManager.getData(pipeline_id);
+        Data data = (Data) DataManager.getData(pipeline_id);
         if (data == null) {
             data = new Data(pipeline_id);
         }
