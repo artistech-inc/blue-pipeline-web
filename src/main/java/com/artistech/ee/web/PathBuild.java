@@ -108,6 +108,12 @@ public class PathBuild extends HttpServlet {
                  * Handle Uploading a File.
                  */
                 if (p.getType().equals("file")) {
+                    // be sure there is a file that was uploaded.
+                    if ("".equals(part.getSubmittedFileName().trim())) {
+                        getServletContext().getRequestDispatcher("/pipeline.jsp?pipeline_id=" + pipeline_id).forward(
+                                request, response);
+                        return;
+                    }
                     p.setValue(part.getSubmittedFileName());
 
                     File dir = new File(data.getInput());
