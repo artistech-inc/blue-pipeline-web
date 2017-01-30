@@ -23,7 +23,7 @@
     </head>
     <body>
         <h1><c:out value="${pipelineBean.name}" />: Data</h1>
-        <c:forEach var="dataDir" items="${dataBean.data.keys}">
+        <c:forEach var="dataDir" items="${dataBean.data.runKeys}">
             <c:if test="${fn:length(dataBean.data.getFiles(dataDir)) gt 0}">
                 <ul><kbd><c:out value="${dataDir}"/></kbd> Files:
                     <c:forEach var="dataFile" items="${dataBean.data.getFiles(dataDir)}">

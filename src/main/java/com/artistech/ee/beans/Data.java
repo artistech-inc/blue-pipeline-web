@@ -7,7 +7,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +16,6 @@ import java.util.logging.Logger;
  */
 public class Data extends DataBase {
     
-    public static final String INPUT_DIR = "input";
     public static final String CAMR_DATA_DIR = "camr_out";
     public static final String ELISA_DIR = "elisa_out";
 
@@ -51,7 +49,7 @@ public class Data extends DataBase {
 
     @Override
     public String[] getKeys() {
-        ArrayList<String> keys = new ArrayList<>(Arrays.asList(super.getKeys()));
+        ArrayList<String> keys = new ArrayList<>();
         Field[] fields = Data.class.getFields();
         for(Field f : fields) {
             int modifiers = f.getModifiers();
