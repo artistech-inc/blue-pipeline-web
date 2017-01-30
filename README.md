@@ -2,15 +2,25 @@
 
 This is a web-app which will utilize various 3rd party apps/scripts for extracting entity information from documents.
 
-## Version 1.0
+## Version 1.2
 
 - Upload file capability
 - Tokenize Input File
 - Extract Entities
+- Shared Code with all Pipeline Projects
 
 ## Downloading
 
-`git clone https://github.com/artistech-inc/blue-pipeline-web.git`
+```sh
+git clone https://github.com/artistech-inc/pipeline-base.git
+cd pipeline-base
+mvn clean install
+cd ..
+git clone https://github.com/artistech-inc/blue-pipeline-web.git
+cd blue-pipeline-web
+git checkout v1.2
+mvn clean package
+```
 
 ## Configuration
 
@@ -38,7 +48,7 @@ To tokenize each sentence prior to extraction.
 
 ## Deployment
 
-The output from compilation is in the `target/` directory as `blue-pipeline-web-1.0.war`. This war can be deployed to Tomcat's `webapps` directory. Once deployed, it can be accessed via `http://<ip_address:port>/blue-pipeline-web-1.0/`.
+The output from compilation is in the `target/` directory as `blue-pipeline-web-1.2.war`. This war can be deployed to Tomcat's `webapps` directory. Once deployed, it can be accessed via `http://<ip_address:port>/blue-pipeline-web-1.2/`.
 
 ## Bugs
 
