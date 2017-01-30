@@ -41,7 +41,7 @@ public class CAMR extends HttpServlet {
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        Data data = DataManager.getData(pipeline_id);
+        Data data = (Data) DataManager.getData(pipeline_id);
         String input_directory = data.getInput();
         String camr_out = data.getCamrOut();
         File output_dir = new File(camr_out);
@@ -87,7 +87,6 @@ public class CAMR extends HttpServlet {
         ExternalProcess ex_proc = new ExternalProcess(sg, t);
         data.setProc(ex_proc);
 
-        data.setPipelineIndex(data.getPipelineIndex() + 1);
         getServletContext().getRequestDispatcher("/watchProcess.jsp").forward(
                 request, response);
     }
