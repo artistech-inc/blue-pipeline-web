@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * Run the ELISA step.
  *
  * @author matta
  */
@@ -42,17 +43,12 @@ public class Elisa extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //String url = "supported_language/en/ie?model=DNN&output_format=KnowledgeGraph";
         String url = getInitParameter("url");
         final String lang = getInitParameter("lang");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
         
-//        Part output_format_part = request.getPart("outputFormat");
-//        final String output_format = IOUtils.toString(output_format_part.getInputStream(), "UTF-8");
-//        Part model_part = request.getPart("model");
-//        final String model = IOUtils.toString(model_part.getInputStream(), "UTF-8");
         Data data = (Data) DataManager.getData(pipeline_id);
         PipelineBean.Part part = data.getPipelineParts().get(data.getPipelineIndex());
         final String model = part.getParameter("model").getValue();
@@ -142,7 +138,7 @@ public class Elisa extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Run ELISA Step";
     }// </editor-fold>
 
 }

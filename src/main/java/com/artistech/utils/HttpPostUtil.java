@@ -19,6 +19,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
+ * HTTP Post utility class.
  *
  * @author matta
  */
@@ -26,6 +27,11 @@ public class HttpPostUtil {
 
     private java.net.URI uri;
 
+    /**
+     * Constructor.
+     *
+     * @param url
+     */
     public HttpPostUtil(java.net.URL url) {
         try {
             uri = new java.net.URI(url.toString());
@@ -34,6 +40,13 @@ public class HttpPostUtil {
         }
     }
 
+    /**
+     * Do POST.
+     *
+     * @param nvc
+     * @param getResponse
+     * @return
+     */
     public String HttpPOSTMultipart(HashMap<String, String> nvc, boolean getResponse) {
         String retVal = "";
         try {

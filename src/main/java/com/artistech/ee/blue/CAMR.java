@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * Run the CAMR/TOK step.
  *
  * @author matta
  */
@@ -127,7 +128,7 @@ public class CAMR extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Run TOK Step";
     }// </editor-fold>
 
 }

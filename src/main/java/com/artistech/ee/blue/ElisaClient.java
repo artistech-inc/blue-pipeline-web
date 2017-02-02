@@ -14,22 +14,40 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Web client for accessing the ELISA service.
+ *
+ * @author matta
+ */
 public class ElisaClient {
 
     private final static Logger LOGGER = Logger.getLogger(ElisaClient.class.getName());
 
     private final String uri;
 
+    /**
+     * Constructor.
+     *
+     * @param base
+     */
     public ElisaClient(String base) {
         uri = base;
     }
 
+    /**
+     * Extract data from a string.
+     *
+     * @param content
+     * @param lang
+     * @param model
+     * @param output_format
+     * @return
+     */
     public String ie(String content, String lang, String model, String output_format) {
         String ret = "";
         try {
 
             URL url = new URL(uri + "/supported_language/" + lang + "/ie?model=" + model + "&output_format=" + output_format);
-//            URL url = new URL(uri + "/supported_language/en/ie?model=DNN&output_format=KnowledgeGraph");
             HttpPostUtil post = new HttpPostUtil(url);
             HashMap<String, String> nvc = new HashMap<>();
             nvc.put("text", content);
@@ -41,6 +59,12 @@ public class ElisaClient {
         return ret;
     }
 
+    /**
+     * Function for a 'get' command.
+     *
+     * @param fn
+     * @return
+     */
     private String get(String fn) {
         try {
 
@@ -75,21 +99,31 @@ public class ElisaClient {
         return "";
     }
 
+    /**
+     * Get the status.
+     *
+     * @return
+     */
     public String getStatus() {
         return get("status");
     }
 
+    /**
+     * Get supported languages.
+     *
+     * @return
+     */
     public String getSupportedLanguage() {
         return get("supported_language/");
     }
 
+    /**
+     * Get the model.
+     *
+     * @param modelId
+     * @return
+     */
     public String getModel(String modelId) {
         return get("supported_language/" + modelId);
     }
-
-//    public static void main(String[] args) {
-//        ElisaClient ec = new ElisaClient();
-//        String ret = ec.extract("Japan began the defence of their Asian Cup title with a lucky 2-1 win against Syria in a Group C championship match on Friday .");
-//        System.out.println(ret);
-//    }
 }
