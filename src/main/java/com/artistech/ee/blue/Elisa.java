@@ -44,13 +44,13 @@ public class Elisa extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = getInitParameter("url");
-        final String lang = getInitParameter("lang");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
         
         Data data = (Data) DataManager.getData(pipeline_id);
         PipelineBean.Part part = data.getPipelineParts().get(data.getPipelineIndex());
+        final String lang = part.getParameter("lang").getValue();
         final String model = part.getParameter("model").getValue();
         final String output_format = part.getParameter("output_format").getValue();
         String[] input_files = data.getCamrFiles();

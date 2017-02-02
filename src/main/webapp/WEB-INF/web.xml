@@ -15,18 +15,6 @@
             <param-name>url</param-name>
             <param-value>http://localhost/</param-value>
         </init-param>
-        <init-param>
-            <param-name>lang</param-name>
-            <param-value>en</param-value>
-        </init-param>
-        <init-param>
-            <param-name>model</param-name>
-            <param-value>DNN</param-value>
-        </init-param>
-        <init-param>
-            <param-name>output_format</param-name>
-            <param-value>KnowledgeGraph</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>CAMR</servlet-name>

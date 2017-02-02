@@ -25,6 +25,12 @@ parts:
         page: Elisa
         parameters: 
             - parameter:
+                name: lang
+                value: en
+                type: select
+                values:
+                    - en
+            - parameter:
                 name: model
                 value: DNN
                 type: select
