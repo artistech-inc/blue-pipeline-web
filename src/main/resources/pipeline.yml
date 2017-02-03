@@ -6,7 +6,7 @@ parts:
     input:
         output-dir: input
         requires: []
-        page: pipeline.jsp
+        page: InputFile
         parameters:
             - parameter:
                 name: Text_File
