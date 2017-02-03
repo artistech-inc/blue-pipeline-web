@@ -9,8 +9,10 @@ import com.artistech.ee.beans.PipelineBean;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -47,7 +49,7 @@ public class Elisa extends HttpServlet {
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        
+
         Data data = (Data) DataManager.getData(pipeline_id);
         PipelineBean.Part part = data.getPipelineParts().get(data.getPipelineIndex());
         final String lang = part.getParameter("lang").getValue();
@@ -74,8 +76,11 @@ public class Elisa extends HttpServlet {
 
             PipedInputStream in = new PipedInputStream();
             final PipedOutputStream out = new PipedOutputStream(in);
-            StreamGobbler sg = new StreamGobbler(in);
+            OutputStream os = new FileOutputStream(new File(data.getConsoleFile()), true);
+            StreamGobbler sg = new StreamGobbler(in, os);
             sg.start();
+//            StreamGobbler sg = new StreamGobbler(in);
+//            sg.start();
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
