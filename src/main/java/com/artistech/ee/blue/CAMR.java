@@ -70,6 +70,12 @@ public class CAMR extends HttpServlet {
                         Process proc = pb.start();
                         OutputStream os = new FileOutputStream(new File(data.getConsoleFile()), true);
                         StreamGobbler sg2 = new StreamGobbler(proc.getInputStream(), os);
+                        sg2.write("TOK");
+                        StringBuilder sb = new StringBuilder();
+                        for (String cmd : pb.command()) {
+                            sb.append(cmd).append(" ");
+                        }
+                        sg2.write(sb.toString().trim());
                         sg2.start();
                         sg.setWrapped(sg2);
                         try {

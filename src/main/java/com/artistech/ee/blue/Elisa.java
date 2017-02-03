@@ -78,6 +78,7 @@ public class Elisa extends HttpServlet {
             final PipedOutputStream out = new PipedOutputStream(in);
             OutputStream os = new FileOutputStream(new File(data.getConsoleFile()), true);
             StreamGobbler sg = new StreamGobbler(in, os);
+            sg.write("ELISA");
             sg.start();
 //            StreamGobbler sg = new StreamGobbler(in);
 //            sg.start();
