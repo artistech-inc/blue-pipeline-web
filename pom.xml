@@ -4,7 +4,7 @@
 
     <groupId>com.artistech</groupId>
     <artifactId>blue-pipeline-web</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <packaging>war</packaging>
 
     <name>blue-pipeline-web</name>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>com.artistech</groupId>
             <artifactId>pipeline-base</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
     </dependencies>
 

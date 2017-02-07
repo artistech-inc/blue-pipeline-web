@@ -9,11 +9,14 @@ import com.artistech.ee.beans.PipelineBean;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +29,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * Run the ELISA step.
  *
  * @author matta
  */
@@ -42,19 +46,14 @@ public class Elisa extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //String url = "supported_language/en/ie?model=DNN&output_format=KnowledgeGraph";
-        String url = getInitParameter("url");
-        final String lang = getInitParameter("lang");
+//        String url = getInitParameter("url");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        
-//        Part output_format_part = request.getPart("outputFormat");
-//        final String output_format = IOUtils.toString(output_format_part.getInputStream(), "UTF-8");
-//        Part model_part = request.getPart("model");
-//        final String model = IOUtils.toString(model_part.getInputStream(), "UTF-8");
+
         Data data = (Data) DataManager.getData(pipeline_id);
         PipelineBean.Part part = data.getPipelineParts().get(data.getPipelineIndex());
+        final String lang = part.getParameter("lang").getValue();
         final String model = part.getParameter("model").getValue();
         final String output_format = part.getParameter("output_format").getValue();
         String[] input_files = data.getCamrFiles();
@@ -66,6 +65,10 @@ public class Elisa extends HttpServlet {
             }
         }
         final String tok = tok2;
+        ArrayList<PipelineBean.Part> currentParts = data.getPipelineParts();
+        PipelineBean.Part get = currentParts.get(data.getPipelineIndex());
+
+        final String url = get.getParameter("url") != null ? get.getParameter("url").getValue() : getInitParameter("url");
 
         final String elisa_out = data.getElisa();
         File elisa_out_file = new File(elisa_out);
@@ -78,8 +81,12 @@ public class Elisa extends HttpServlet {
 
             PipedInputStream in = new PipedInputStream();
             final PipedOutputStream out = new PipedOutputStream(in);
-            StreamGobbler sg = new StreamGobbler(in);
+            OutputStream os = new FileOutputStream(new File(data.getConsoleFile()), true);
+            StreamGobbler sg = new StreamGobbler(in, os);
+            sg.write("ELISA");
             sg.start();
+//            StreamGobbler sg = new StreamGobbler(in);
+//            sg.start();
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -142,7 +149,7 @@ public class Elisa extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Run ELISA Step";
     }// </editor-fold>
 
 }

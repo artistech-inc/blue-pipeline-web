@@ -5,11 +5,15 @@ package com.artistech.ee.blue;
 
 import com.artistech.ee.beans.Data;
 import com.artistech.ee.beans.DataManager;
+import com.artistech.ee.beans.PipelineBean;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
 import com.artistech.utils.StreamGobblerWrapper;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,6 +25,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * Run the CAMR/TOK step.
  *
  * @author matta
  */
@@ -37,15 +42,20 @@ public class CAMR extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        final String camr_path = getInitParameter("path");
+//        final String camr_path = getInitParameter("path");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        Data data = (Data) DataManager.getData(pipeline_id);
+        final Data data = (Data) DataManager.getData(pipeline_id);
         String input_directory = data.getInput();
         String camr_out = data.getCamrOut();
         File output_dir = new File(camr_out);
         FileUtils.copyDirectory(new File(input_directory), output_dir);
+
+        ArrayList<PipelineBean.Part> currentParts = data.getPipelineParts();
+        PipelineBean.Part get = currentParts.get(data.getPipelineIndex());
+
+        final String camr_path = get.getParameter("path") != null ? get.getParameter("path").getValue() : getInitParameter("path");
 
         final File[] copied_input_files = output_dir.listFiles();
 
@@ -65,7 +75,14 @@ public class CAMR extends HttpServlet {
                         //catch output...
                         pb.redirectErrorStream(true);
                         Process proc = pb.start();
-                        StreamGobbler sg2 = new StreamGobbler(proc.getInputStream());
+                        OutputStream os = new FileOutputStream(new File(data.getConsoleFile()), true);
+                        StreamGobbler sg2 = new StreamGobbler(proc.getInputStream(), os);
+                        sg2.write("TOK");
+                        StringBuilder sb = new StringBuilder();
+                        for (String cmd : pb.command()) {
+                            sb.append(cmd).append(" ");
+                        }
+                        sg2.write(sb.toString().trim());
                         sg2.start();
                         sg.setWrapped(sg2);
                         try {
@@ -127,7 +144,7 @@ public class CAMR extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Run TOK Step";
     }// </editor-fold>
 
 }

@@ -2,11 +2,12 @@ name: "Blue Pipeline Run View"
 description: |
     The Blue Pipeline allows a user to run CAMR and the ELISA extractor.
 data-object: com.artistech.ee.beans.Data
+data-dir: /work/Dev/blue-pipeline-web/data
 parts:
     input:
         output-dir: input
         requires: []
-        page: pipeline.jsp
+        page: InputFile
         parameters:
             - parameter:
                 name: Text_File
@@ -17,13 +18,23 @@ parts:
         requires:
             - input
         page: CAMR
-        parameters: []
+        parameters:
+            - parameter:
+                name: path
+                value: /home/matta/Dev/camr
+                type: hidden
     elisa:
         output-dir: elisa_out
         requires:
             - camr
         page: Elisa
         parameters: 
+            - parameter:
+                name: lang
+                value: en
+                type: select
+                values:
+                    - en
             - parameter:
                 name: model
                 value: DNN
@@ -39,3 +50,7 @@ parts:
                 values:
                     - KnowledgeGraph
                     - EvalTab
+            - parameter:
+                name: url
+                value: http://localhost/
+                type: hidden
