@@ -2,7 +2,7 @@ name: "Blue Pipeline Run View"
 description: |
     The Blue Pipeline allows a user to run CAMR and the ELISA extractor.
 data-object: com.artistech.ee.beans.Data
-data-dir: /work/Dev/orange-pipeline-web/data
+data-dir: /work/Dev/blue-pipeline-web/data
 parts:
     input:
         output-dir: input
