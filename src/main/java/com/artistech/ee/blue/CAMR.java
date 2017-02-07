@@ -5,6 +5,7 @@ package com.artistech.ee.blue;
 
 import com.artistech.ee.beans.Data;
 import com.artistech.ee.beans.DataManager;
+import com.artistech.ee.beans.PipelineBean;
 import com.artistech.utils.ExternalProcess;
 import com.artistech.utils.StreamGobbler;
 import com.artistech.utils.StreamGobblerWrapper;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -40,7 +42,7 @@ public class CAMR extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        final String camr_path = getInitParameter("path");
+//        final String camr_path = getInitParameter("path");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
@@ -49,6 +51,11 @@ public class CAMR extends HttpServlet {
         String camr_out = data.getCamrOut();
         File output_dir = new File(camr_out);
         FileUtils.copyDirectory(new File(input_directory), output_dir);
+
+        ArrayList<PipelineBean.Part> currentParts = data.getPipelineParts();
+        PipelineBean.Part get = currentParts.get(data.getPipelineIndex());
+
+        final String camr_path = get.getParameter("path") != null ? get.getParameter("path").getValue() : getInitParameter("path");
 
         final File[] copied_input_files = output_dir.listFiles();
 

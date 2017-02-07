@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class Elisa extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = getInitParameter("url");
+//        String url = getInitParameter("url");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
@@ -64,6 +65,10 @@ public class Elisa extends HttpServlet {
             }
         }
         final String tok = tok2;
+        ArrayList<PipelineBean.Part> currentParts = data.getPipelineParts();
+        PipelineBean.Part get = currentParts.get(data.getPipelineIndex());
+
+        final String url = get.getParameter("url") != null ? get.getParameter("url").getValue() : getInitParameter("url");
 
         final String elisa_out = data.getElisa();
         File elisa_out_file = new File(elisa_out);
