@@ -1,10 +1,17 @@
 /*
  * Copyright 2017 ArtisTech, Inc.
  */
-package com.artistech.ee.web;
+package com.artistech.ee.blue;
 
+import com.artistech.ee.beans.Data;
+import com.artistech.ee.beans.DataManager;
+import com.artistech.utils.ExternalProcess;
+import com.artistech.utils.StreamGobbler;
+import com.artistech.utils.StreamGobblerWrapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,42 +37,56 @@ public class CAMR extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String camr_path = getInitParameter("path");
+        final String camr_path = getInitParameter("path");
 
         Part pipeline_id_part = request.getPart("pipeline_id");
         String pipeline_id = IOUtils.toString(pipeline_id_part.getInputStream(), "UTF-8");
-        Data data = DataManager.getData(pipeline_id);
+        Data data = (Data) DataManager.getData(pipeline_id);
         String input_directory = data.getInput();
-        File f = new File(input_directory);
         String camr_out = data.getCamrOut();
-//        data.setCamrOut(camr_out);
         File output_dir = new File(camr_out);
         FileUtils.copyDirectory(new File(input_directory), output_dir);
-//        output_dir.mkdirs();
 
-        File[] copied_input_files = output_dir.listFiles();
-        for (File txt : copied_input_files) {
-            //TODO: need to know "$FILE_LIST", "$INPUT_SGM", "$ENIE_OUTP"
-            ProcessBuilder pb = new ProcessBuilder("./tok-pipeline.sh", txt.getAbsolutePath());
-            pb.directory(new File(camr_path));
-            //catch output...
-            pb.redirectErrorStream(true);
-            Process proc = pb.start();
-            StreamGobbler sg = new StreamGobbler(proc.getInputStream());
-            sg.start();
-            ExternalProcess ex_proc = new ExternalProcess(sg, proc);
-            data.setProc(ex_proc);
-//            try {
-//                proc.waitFor();
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+        final File[] copied_input_files = output_dir.listFiles();
 
-        }
-//        Part part = request.getPart("step");
-//        String target = IOUtils.toString(part.getInputStream(), "UTF-8");
+//        PipedInputStream in = new PipedInputStream();
+//        final PipedOutputStream out = new PipedOutputStream(in);
+        final StreamGobblerWrapper sg = new StreamGobblerWrapper(null);
+        sg.start();
 
-        // displays done.jsp page after upload finished
+//        final OutputStreamWriter bos = new OutputStreamWriter(out);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (File txt : copied_input_files) {
+                    try {
+                        ProcessBuilder pb = new ProcessBuilder("./tok-pipeline.sh", txt.getAbsolutePath());
+                        pb.directory(new File(camr_path));
+                        //catch output...
+                        pb.redirectErrorStream(true);
+                        Process proc = pb.start();
+                        StreamGobbler sg2 = new StreamGobbler(proc.getInputStream());
+                        sg2.start();
+                        sg.setWrapped(sg2);
+                        try {
+                            proc.waitFor();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+//                        bos.write(sg2.getUpdateText());
+//                        bos.write(System.lineSeparator());
+//                        bos.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(CAMR.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            }
+        });
+        t.start();
+        ExternalProcess ex_proc = new ExternalProcess(sg, t);
+        data.setProc(ex_proc);
+
         getServletContext().getRequestDispatcher("/watchProcess.jsp").forward(
                 request, response);
     }

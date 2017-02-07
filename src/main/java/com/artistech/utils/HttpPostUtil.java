@@ -1,7 +1,7 @@
 /*
  * Copyright 2015 ArtisTech, Inc.
  */
-package com.artistech.ee.web;
+package com.artistech.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;

@@ -1,0 +1,41 @@
+name: "Blue Pipeline Run View"
+description: |
+    The Blue Pipeline allows a user to run CAMR and the ELISA extractor.
+data-object: com.artistech.ee.beans.Data
+parts:
+    input:
+        output-dir: input
+        requires: []
+        page: pipeline.jsp
+        parameters:
+            - parameter:
+                name: Text_File
+                value: ""
+                type: file
+    camr:
+        output-dir: camr_out
+        requires:
+            - input
+        page: CAMR
+        parameters: []
+    elisa:
+        output-dir: elisa_out
+        requires:
+            - camr
+        page: Elisa
+        parameters: 
+            - parameter:
+                name: model
+                value: DNN
+                type: select
+                values:
+                    - DNN
+#                    - ExpectD
+#                    - CRF
+            - parameter:
+                name: output_format
+                value: KnowledgeGraph
+                type: select
+                values:
+                    - KnowledgeGraph
+                    - EvalTab

@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>com.artistech.ee.web.UploadServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>CAMR</servlet-name>
-        <servlet-class>com.artistech.ee.web.CAMR</servlet-class>
+        <servlet-class>com.artistech.ee.blue.CAMR</servlet-class>
         <init-param>
             <param-name>path</param-name>
             <param-value>/home/matta/Dev/camr</param-value>
         </init-param>
     </servlet>
     <servlet>
-        <servlet-name>ViewRaw</servlet-name>
-        <servlet-class>com.artistech.ee.web.ViewRaw</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProcessOutput</servlet-name>
-        <servlet-class>com.artistech.ee.web.ProcessOutput</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProcessMonitor</servlet-name>
-        <servlet-class>com.artistech.ee.web.ProcessMonitor</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>KillProcess</servlet-name>
-        <servlet-class>com.artistech.ee.web.KillProcess</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Elisa</servlet-name>
-        <servlet-class>com.artistech.ee.web.Elisa</servlet-class>
+        <servlet-class>com.artistech.ee.blue.Elisa</servlet-class>
         <init-param>
             <param-name>url</param-name>
-            <param-value></param-value>
+            <param-value>http://localhost/</param-value>
         </init-param>
         <init-param>
             <param-name>lang</param-name>
@@ -49,28 +29,8 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/UploadServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>CAMR</servlet-name>
         <url-pattern>/CAMR</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ViewRaw</servlet-name>
-        <url-pattern>/ViewRaw</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProcessOutput</servlet-name>
-        <url-pattern>/ProcessOutput</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProcessMonitor</servlet-name>
-        <url-pattern>/ProcessMonitor</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>KillProcess</servlet-name>
-        <url-pattern>/KillProcess</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Elisa</servlet-name>
