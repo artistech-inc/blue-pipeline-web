@@ -26,7 +26,7 @@ mvn clean package
 Update the [pipeline.yml](https://github.com/artistech-inc/blue-pipeline-web/blob/master/src/main/resources/pipeline.yml) file.  Each component must have the proper path value set.  This is the location where the external process will execute from.
 
 - CAMR (see below and also yellow-pipeline-web)
-- Elisa (set the url for Elisa)
+- Elisa (set the url for Elisa) (ex: http://localhost:3300/elisa_ie)
 
 The `data-path` value must be somewhere that Tomcat can write to.
 
@@ -41,9 +41,9 @@ cd blue-pipeline-web
 mvn clean package
 ```
 ## Dependencies
-To tokenize each sentence prior to extraction.
 
 - [ArtisTech's camr yellow-pipeline fork/branch](https://github.com/artistech-inc/camr/tree/yellow-pipeline)
+- [ELISA-IE](https://hub.docker.com/r/zhangb8/lorelei/)
 
 ## Deployment
 

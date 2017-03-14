@@ -52,5 +52,5 @@ parts:
                     - EvalTab
             - parameter:
                 name: url
-                value: http://localhost/
+                value: http://ubuntu-16:3300/elisa_ie
                 type: hidden
